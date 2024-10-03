@@ -1,0 +1,19 @@
+# certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: www-production #www-staging
+spec:
+  secretName: letsencrypt-production #letsencrypt-staging
+  privateKey:
+    rotationPolicy: Always
+  commonName: www.cloudrev.tech
+  dnsNames:
+    - www.cloudrev.tech
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+  issuerRef:
+    name: letsencrypt-production #letsencrypt-production
+    kind: ClusterIssuer
