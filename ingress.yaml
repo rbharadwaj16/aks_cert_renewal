@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-app-ingress
+  namespace: demo-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-production #need to match with the cluster issuer
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: www.cloudrev.tech
+    http:
+      paths:
+      - pathType: Prefix
+        path: /(.*)
+        backend:
+          service:
+            name: demo-app-svc
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - www.cloudrev.tech
+    secretName: letsencrypt-production #cloudrev-prod.tech-cert
+  # rules:
+  # - http:
+  #     paths:
+  #     - path: /(.*)
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: demo-app-svc
+  #           port:
+  #             number: 80
